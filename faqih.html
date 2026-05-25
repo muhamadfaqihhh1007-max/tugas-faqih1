@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layout Grid Premium dengan Foto Profil</title>
+  
+  <style>
+    /* ==========================================
+       1. RESET & ELEMENT UTAMA
+       ========================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box; /* Mencegah padding merusak ukuran layout */
+    }
+     
+    body {
+      background-color: #eff1f2;
+      font-family: sans-serif;
+    }
+     
+    .content {
+      grid-area: content;
+    }
+     
+    .sidebar {
+      grid-area: sidebar;
+      background: linear-gradient(
+        to right,
+        rgb(0, 0, 0),
+        rgba(218, 105, 250, 1),
+        rgb(0, 0, 0)
+      );
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+     
+    .footer {
+      grid-area: footer;
+      background: white;
+      border-top: 1px solid #e1e4e6;
+    }
+     
+    .container {
+      font-size: 1.2em; /* Proporsional untuk keterbacaan text */
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      grid-template-areas: 'sidebar' 'content' 'footer';
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto; /* Dinamis mengikuti konten di mobile */
+    }
+     
+    .content,
+    .sidebar,
+    .footer {
+      padding: 2em 1.5em;
+    }
+
+    /* ==========================================
+       2. TEMPAT FOTO PROFIL (AVATAR)
+       ========================================== */
+    .profile-card {
+      text-align: center;
+      margin-bottom: 2em;
+      width: 100%;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1em auto;
+    }
+
+    .avatar-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Menjaga foto agar tidak gepeng atau distorsi */
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.4); /* Menyatu halus dengan gradasi */
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .avatar-wrapper:hover img {
+      transform: scale(1.05);
+      border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Indikator Status Online Hijau */
+    .status-indicator {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid #dd64ff; /* Menyesuaikan rona warna background */
+      background-color: #00ff6a;
+    }
+
+    .profile-name {
+      color: white;
+      font-size: 1.2em;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-role {
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.85em;
+      font-weight: 400;
+    }
+
+    /* ==========================================
+       3. NAVIGATION (MENU)
+       ========================================== */
+    nav {
+      width: 100%;
+    }
+
+    nav ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+    }
+     
+    nav li {
+      list-style: none;
+      padding: 0.5em 0;
+    }
+     
+    nav li a {
+      color: white;
+      font-weight: 700;
+      opacity: 0.6;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+     
+    nav li a:hover {
+      opacity: 1;
+    }
+     
+    /* ==========================================
+       4. HERO SECTION (KONTEN UTAMA)
+       ========================================== */
+    .hero {
+      max-width: 800px; /* Perbaikan dari bug 90 px */
+      margin: 2em auto;
+      text-align: center;
+    }
+     
+    .hero img {
+      width: 200px;
+      margin-bottom: 1.5em;
+    }
+     
+    .hero h1 {
+      font-size: 2.2em;
+      font-weight: 300;
+      color: #373046;
+      margin-bottom: 0.5em;
+    }
+     
+    .hero p {
+      font-weight: 300;
+      line-height: 1.5em;
+      color: #98abad;
+    }
+     
+    .action-btn {
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      font-weight: 700;
+      background: #587cff;
+      padding: 0.7em 2.5em;
+      border-radius: 60px;
+      margin: 1.5em 0;
+      transition: 0.3s;
+      box-shadow: 0 4px 12px rgba(86, 123, 251, 0.3);
+    }
+
+    .action-btn:hover {
+      background: #3d63dd;
+      transform: translateY(-1px);
+    }
+     
+    /* ==========================================
+       5. FOOTER
+       ========================================== */
+    footer ul {
+      max-width: 640px;
+      margin: 1em auto;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 2em;
+    }
+     
+    footer ul li {
+      list-style: none;
+    }
+     
+    footer ul li a {
+      text-decoration: none;
+      color: #c1c6ce;
+      font-size: 0.9em;
+      transition: color 0.3s;
+    }
+
+    footer ul li a:hover {
+      color: #7e8694;
+    }
+     
+    footer p {
+      text-align: center;
+      font-size: 0.8em;
+      color: #a0a5ad;
+      margin-top: 1em;
+    }
+     
+    /* ==========================================
+       6. MEDIA QUERIES (DESKTOP MODE)
+       ========================================== */
+    @media (min-width: 1040px) {
+      .container {
+        grid-template-areas: 'sidebar content' 'sidebar footer';
+        grid-template-rows: 1fr auto;
+        grid-template-columns: 300px 1fr; /* Perbaikan fatal typo 1f ke 1fr */
+      }
+     
+      .sidebar {
+        /* Mengubah gradasi arah vertikal khusus di tampilan desktop komputer */
+        background: linear-gradient(
+          to bottom,
+          rgba(200, 107, 142, 1),
+          rgba(218, 105, 250, 1),
+          rgb(51, 60, 146)
+        );
+        padding: 4em 2em;
+        justify-content: flex-start; /* Mengatur isi sidebar agar rapi dari atas */
+      }
+
+      .profile-card {
+        margin-bottom: 3em; /* Jarak ekstra antara nama profil dan daftar menu */
+      }
+
+      .avatar-wrapper {
+        width: 140px;
+        height: 140px; /* Ukuran foto profil sedikit membesar di layar lebar */
+      }
+     
+      nav ul {
+        flex-direction: column; /* Menu berjejer vertikal ke bawah di desktop */
+        gap: 1.2em;
+      }
+     
+      .hero {
+        text-align: left;
+        margin: 6em 2em;
+      }
+     
+      .hero img {
+        width: 250px;
+        float: right; /* Ilustrasi berpindah di sisi kanan teks */
+        margin-left: 2em;
+      }
+     
+      .hero h1 {
+        font-size: 3em;
+      }
+     
+      .hero p {
+        width: 65%;
+      }
+     
+      footer ul {
+        max-width: 100%;
+        margin: 0;
+        justify-content: flex-start;
+      }
+
+      footer p {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- SIDEBAR (Kiri pada Desktop / Atas pada Mobile) -->
+    <aside class="sidebar">
+      
+      <!-- ELEMEN FOTO PROFIL -->
+      <div class="profile-card">
+        <div class="avatar-wrapper">
+          <!-- Kamu bisa ganti tautan src di bawah ini dengan foto profilmu sendiri -->
+          <img src="p.jpg" alt="Foto Profil">
+          <span class="status-indicator online"></span>
+        </div>
+        <h2 class="profile-name">Avatar Aang</h2>
+        <p class="profile-role">UI/UX Designer By Avtar Aang</p>
+      </div>
+      
+      <!-- NAVIGASI UTAMA -->
+      <nav>
+        <ul>
+          <li><a href="#">Beranda</a></li>
+          <li><a href="#">Portofolio</a></li>
+          <li><a href="#">Tentang</a></li>
+          <li><a href="#">Kontak</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- KONTEN UTAMA WEB -->
+    <main class="content">
+      <section class="hero">
+        <!-- Ilustrasi gambar utama halaman -->
+        <img src="meme.jpg" alt="Hero Illustration">
+        <h1>Kreativitas Tanpa Batas</h1>
+        <p>Kami membangun produk digital yang memadukan keindahan visual dengan fungsionalitas tingkat tinggi untuk bisnis masa kini.</p>
+        <a href="#" class="action-btn">Mulai Sekarang</a>
+      </section>
+    </main>
+
+    <!-- FOOTER HALAMAN -->
+    <footer class="footer">
+      <ul>
+        <li><a href="#">Privasi</a></li>
+        <li><a href="#">Syarat & Ketentuan</a></li>
+        <li><a href="#">Bantuan</a></li>
+      </ul>
+      <p>&copy; 2026 Hak Cipta Dilindungi.</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
